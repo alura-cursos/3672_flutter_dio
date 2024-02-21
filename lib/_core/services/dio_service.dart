@@ -22,4 +22,13 @@ class DioService {
       options: Options(contentType: "application/json; utf-8;"),
     );
   }
+
+  getDataFromServer(AppDatabase appDatabase) async {
+    Response response = await _dio.get("${url}listins.json");
+
+    print(response.statusCode);
+    print(response.headers.toString());
+    print(response.data);
+    print(response.data.runtimeType);
+  }
 }

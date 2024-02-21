@@ -168,7 +168,9 @@ class _HomeScreenState extends State<HomeScreen> {
     await _dioService.saveLocalToServer(_appDatabase);
   }
 
-  syncWithServer() async {}
+  syncWithServer() async {
+    await _dioService.getDataFromServer(_appDatabase);
+  }
 
   clearServerData() async {}
 }
