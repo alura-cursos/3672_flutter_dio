@@ -38,6 +38,47 @@ class _HomeScreenState extends State<HomeScreen> {
       drawer: HomeDrawer(user: widget.user),
       appBar: AppBar(
         title: const Text("Minhas listas"),
+        actions: [
+          PopupMenuButton(
+            icon: const Icon(Icons.cloud),
+            onSelected: (value) {
+              if (value == "SAVE") {
+                saveOnServer();
+              }
+              if (value == "SYNC") {
+                syncWithServer();
+              }
+              if (value == "CLEAR") {
+                clearServerData();
+              }
+            },
+            itemBuilder: (context) {
+              return [
+                const PopupMenuItem(
+                  value: "SAVE",
+                  child: ListTile(
+                    leading: Icon(Icons.upload),
+                    title: Text("Salvar na nuvem"),
+                  ),
+                ),
+                const PopupMenuItem(
+                  value: "SYNC",
+                  child: ListTile(
+                    leading: Icon(Icons.download),
+                    title: Text("Sincronizar da nuvem"),
+                  ),
+                ),
+                const PopupMenuItem(
+                  value: "CLEAR",
+                  child: ListTile(
+                    leading: Icon(Icons.delete),
+                    title: Text("Remover dados da nuvem"),
+                  ),
+                ),
+              ];
+            },
+          ),
+        ],
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
@@ -120,4 +161,10 @@ class _HomeScreenState extends State<HomeScreen> {
     await _appDatabase.deleteListin(int.parse(model.id));
     refresh();
   }
+
+  saveOnServer() async {}
+
+  syncWithServer() async {}
+
+  clearServerData() async {}
 }
