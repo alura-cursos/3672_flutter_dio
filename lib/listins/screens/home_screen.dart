@@ -170,6 +170,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   syncWithServer() async {
     await _dioService.getDataFromServer(_appDatabase);
+    refresh();
   }
 
   clearServerData() async {}
