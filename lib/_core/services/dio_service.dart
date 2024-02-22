@@ -28,7 +28,13 @@ class DioService {
   }
 
   getDataFromServer(AppDatabase appDatabase) async {
-    Response response = await _dio.get("listins.json");
+    Response response = await _dio.get(
+      "listins.json",
+      queryParameters: {
+        "orderBy": '"name"',
+        "startAt": 0,
+      },
+    );
 
     // print(response.statusCode);
     // print(response.headers.toString());
@@ -36,16 +42,25 @@ class DioService {
     // print(response.data.runtimeType);
 
     if (response.data != null) {
-      if ((response.data as List<dynamic>).isNotEmpty) {
-        Map<String, dynamic> map = {};
+      Map<String, dynamic> map = {};
 
-        map["listins"] = response.data;
+      if (response.data.runtimeType == List) {
+        if ((response.data as List<dynamic>).isNotEmpty) {
+          map["listins"] = response.data;
+        }
+      } else {
+        List<Map<String, dynamic>> tempList = [];
 
-        await LocalDataHandler().mapToLocalData(
-          map: map,
-          appdatabase: appDatabase,
-        );
+        for (var mapResponse in (response.data as Map).values) {
+          tempList.add(mapResponse);
+        }
+
+        map["listins"] = tempList;
       }
+      await LocalDataHandler().mapToLocalData(
+        map: map,
+        appdatabase: appDatabase,
+      );
     }
   }
 
