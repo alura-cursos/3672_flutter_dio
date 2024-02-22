@@ -173,5 +173,7 @@ class _HomeScreenState extends State<HomeScreen> {
     refresh();
   }
 
-  clearServerData() async {}
+  clearServerData() async {
+    await _dioService.clearServerData();
+  }
 }
