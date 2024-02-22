@@ -16,6 +16,7 @@ class DioInterceptor extends Interceptor {
     String log = "";
     log += "REQUISIÇÃO\n";
     log += "Timestamp: ${DateTime.now()}\n";
+    log += "Método: ${options.method}\n";
     log += "URL: ${options.uri}\n";
     log +=
         "Cabeçalho: ${const JsonEncoder.withIndent("  ").convert(options.headers)}\n";
@@ -25,6 +26,12 @@ class DioInterceptor extends Interceptor {
     }
 
     _logger.w(log);
+    Dio().post(
+      "https://flutter-dio-2ca78-default-rtdb.firebaseio.com/logs.json",
+      data: {
+        "request": log,
+      },
+    );
     super.onRequest(options, handler);
   }
 
