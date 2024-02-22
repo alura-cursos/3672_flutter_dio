@@ -15,6 +15,10 @@ class DioService {
     ),
   );
 
+  DioService() {
+    _dio.interceptors.add(LogInterceptor());
+  }
+
   Future<void> saveLocalToServer(AppDatabase appdatabase) async {
     Map<String, dynamic> localData =
         await LocalDataHandler().localDataToMap(appdatabase: appdatabase);
