@@ -2,14 +2,15 @@ import 'dart:convert';
 
 import 'package:dio/dio.dart';
 import 'package:flutter_listin/_core/data/local_data_handler.dart';
+import 'package:flutter_listin/_core/services/dio_endpoints.dart';
 import 'package:flutter_listin/_core/services/dio_interceptor.dart';
 import 'package:flutter_listin/listins/data/database.dart';
 
 class DioService {
   final Dio _dio = Dio(
     BaseOptions(
-      baseUrl: "https://flutter-dio-2ca78-default-rtdb.firebaseio.com/",
-      contentType: "application/json; utf-8;",
+      baseUrl: DioEndpoints.devBaseUrl,
+      contentType: Headers.jsonContentType,
       responseType: ResponseType.json,
       connectTimeout: const Duration(seconds: 5),
       receiveTimeout: const Duration(seconds: 3),
@@ -26,7 +27,7 @@ class DioService {
 
     try {
       await _dio.put(
-        "listins.json",
+        DioEndpoints.listins,
         data: json.encode(
           localData["listins"],
         ),
@@ -45,7 +46,7 @@ class DioService {
 
   getDataFromServer(AppDatabase appDatabase) async {
     Response response = await _dio.get(
-      "listins.json",
+      DioEndpoints.listins,
       queryParameters: {
         "orderBy": '"name"',
         "startAt": 0,
@@ -81,6 +82,6 @@ class DioService {
   }
 
   Future<void> clearServerData() async {
-    await _dio.delete("listins.json");
+    await _dio.delete(DioEndpoints.listins);
   }
 }
