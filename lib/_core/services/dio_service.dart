@@ -20,16 +20,27 @@ class DioService {
     _dio.interceptors.add(DioInterceptor());
   }
 
-  Future<void> saveLocalToServer(AppDatabase appdatabase) async {
+  Future<String?> saveLocalToServer(AppDatabase appdatabase) async {
     Map<String, dynamic> localData =
         await LocalDataHandler().localDataToMap(appdatabase: appdatabase);
 
-    await _dio.put(
-      "listins.json",
-      data: json.encode(
-        localData["listins"],
-      ),
-    );
+    try {
+      await _dio.put(
+        "listins.json",
+        data: json.encode(
+          localData["listins"],
+        ),
+      );
+    } on DioException catch (e) {
+      if (e.response != null && e.response!.data != null) {
+        return e.response!.data!.toString();
+      } else {
+        return e.message;
+      }
+    } on Exception {
+      return "Um erro aconteceu.";
+    }
+    return null;
   }
 
   getDataFromServer(AppDatabase appDatabase) async {
